@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:jobsheet7/service/http_service.dart';
+import 'package:jobsheet7/pages/movie_detail.dart';
+
 class MovieList extends StatefulWidget {
   @override
   _MovieListState createState() => _MovieListState();
 }
-
 class _MovieListState extends State<MovieList> {
   late int movieCount = 0;
   late List movies;
@@ -50,7 +51,10 @@ class _MovieListState extends State<MovieList> {
                 'Rating = ' + movies[position].voteAverage.toString(),
               ),
               onTap: () {
-
+                MaterialPageRoute route = MaterialPageRoute(
+                  builder: (context) => DetailPage(movies[position]),
+                );
+                Navigator.push(context, route);
               },
             ),
           );
