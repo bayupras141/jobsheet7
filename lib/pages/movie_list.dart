@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:jobsheet7/service/http_service.dart';
-import 'package:jobsheet7/models/movie.dart';
-
-
 class MovieList extends StatefulWidget {
   @override
   _MovieListState createState() => _MovieListState();
