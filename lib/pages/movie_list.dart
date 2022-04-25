@@ -9,49 +9,55 @@ class MovieList extends StatefulWidget {
 }
 
 class _MovieListState extends State<MovieList> {
-  late Future<Movie> popularMovies;
-
-  String result = "";
-  // int moviesCount = 0;
-  // List<String> movies = [];
-  HttpService service = HttpService();
+  late int movieCount = 0;
+  late List movies;
+  late HttpService service;
+  final String imgPath = 'https://image.tmdb.org/t/p/w500/';
 
   Future initialize() async {
-    result = await service.getPopularMovies();
+    movies = [];
+    movies = (await service.getPopularMovies())!;
     setState(() {
-      popularMovies = result as Future<Movie>;
+      movieCount = movies.length;
+      movies = movies;
     });
   }
 
   @override
-  void initState(){
-    initState();
+  void initState() {
+    service = HttpService();
+    initialize();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    service.getPopularMovies().then((value) {
-      setState(() {
-        result = value;
-      });
-    });
     return Scaffold(
       appBar: AppBar(
-        title: Text("Popular Movies"),
+        title: const Text('Popular Movies'),
       ),
-      body: Container(
-        child: FutureBuilder<Movie>(
-          future: popularMovies,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Text(snapshot.data!.title);
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            }
-            return CircularProgressIndicator();
-          },
-        ),
+      body: ListView.builder(
+        itemCount: (movieCount == null) ? 0 : movieCount,
+        itemBuilder: (context, int position) {
+          return Card(
+            color: Colors.white,
+            elevation: 2.0,
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.blue,
+                backgroundImage:
+                    NetworkImage(imgPath + movies[position].posterPath),
+              ),
+              title: Text(movies[position].title),
+              subtitle: Text(
+                'Rating = ' + movies[position].voteAverage.toString(),
+              ),
+              onTap: () {
+
+              },
+            ),
+          );
+        },
       ),
     );
   }
